@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HelioAqua – Vue du ciel (Simulation 3D)</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+
+  <!-- WebGL 3D Canvas Container -->
+  <div id="canvas-container"></div>
+
+  <!-- Projected 3D Floating Labels Overlay -->
+  <div id="hotspots-container"></div>
+
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <div class="brand-section">
+      <div class="brand-logo" title="HelioAqua">☀️</div>
+      <div class="brand-info">
+        <h1>
+          HelioAqua – L'eau du soleil pour une agriculture durable
+          <span class="badge-mode" id="topBadgeMode">Vue du Ciel 3D</span>
+        </h1>
+        <p>Simulation drone interactive • Conçu par Ela Guesmi, Imen Bouali, Maram Khaloufi, Lina Ghars</p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn-header btn-labels active" id="btnToggleLabels" title="Afficher ou masquer les repères">
+        <span>📍</span> Repères 3D
+      </button>
+      <button class="btn-header btn-reset-cam" id="btnResetCamera" title="Recentrer la vue du ciel">
+        <span>🔄</span> Vue Drone
+      </button>
+      <button class="btn-header btn-tour" id="btnStartTour">
+        <span>▶</span> Visite Guidée (35s)
+      </button>
+    </div>
+  </header>
+
+  <!-- LEFT CONTROL PANEL -->
+  <aside class="panel-left">
+    <div class="panel-title">
+      <span>🎛️</span> Commandes du Système
+    </div>
+
+    <!-- Mode Toggle: Solar vs Diesel -->
+    <div class="control-item">
+      <div class="mode-switch-card" id="modeCard">
+        <label class="switch-wrapper">
+          <input type="checkbox" id="modeSwitch">
+          <span class="switch-track"></span>
+        </label>
+        <div>
+          <strong id="modeTitleText" style="font-size: 15px; color: #10b981;">☀️ Solaire (HelioAqua)</strong>
+          <p id="modeDescText" style="font-size: 12px; color: #64748b;">0 DT carburant • Zéro fumée</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Time of Day Slider -->
+    <div class="control-item">
+      <div class="control-header">
+        <span>Heure de la journée</span>
+        <span class="control-val-tag" id="valTime">12:00 (Midi)</span>
+      </div>
+      <input type="range" id="sliderTime" min="6" max="18" step="0.2" value="12">
+      <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8;">
+        <span>06h (Aube)</span>
+        <span>12h (Zénith)</span>
+        <span>18h (Coucher)</span>
+      </div>
+    </div>
+
+    <!-- Sun Intensity / Cloudiness Slider -->
+    <div class="control-item">
+      <div class="control-header">
+        <span>Ensoleillement & Nuages</span>
+        <span class="control-val-tag" id="valSun">100% (Plein soleil)</span>
+      </div>
+      <input type="range" id="sliderSun" min="15" max="100" step="5" value="100">
+      <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8;">
+        <span>Nuageux</span>
+        <span>Modéré</span>
+        <span>Optimal</span>
+      </div>
+    </div>
+
+    <!-- Business Scale / Sold Installations Slider (Grows 3D farm) -->
+    <div class="control-item">
+      <div class="control-header">
+        <span>Installations vendues</span>
+        <span class="control-val-tag" id="valInstalls" style="background: #ecfdf5; color: #047857; font-size: 14px;">10 unités</span>
+      </div>
+      <input type="range" id="sliderInstalls" min="1" max="20" step="1" value="10">
+      <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8;">
+        <span>1 kit</span>
+        <span>8 (Seuil)</span>
+        <span>10 (Plan An 1)</span>
+        <span>20 kits</span>
+      </div>
+      <p style="font-size: 11px; color: #0284c7; font-weight: 600; margin-top: 2px;">
+        ✨ Ajuste les panneaux et parcelles visibles en 3D !
+      </p>
+    </div>
+  </aside>
+
+  <!-- RIGHT TELEMETRY PANEL -->
+  <aside class="panel-right">
+    <div class="panel-title">
+      <span>📡</span> Données en Temps Réel
+    </div>
+
+    <div class="metrics-list">
+      <!-- Energy Production -->
+      <div class="metric-row energy" id="metricCardEnergy">
+        <div class="m-label-group">
+          <span class="m-label" id="labelEnergy">⚡ Puissance Solaire</span>
+          <span class="m-sub" id="subEnergy">Production instantanée</span>
+        </div>
+        <div class="m-value" id="valMetricPower">2 450 W</div>
+      </div>
+
+      <!-- Water Flow / Pumped -->
+      <div class="metric-row water">
+        <div class="m-label-group">
+          <span class="m-label">💧 Débit Pompé</span>
+          <span class="m-sub">Vers réseau goutte-à-goutte</span>
+        </div>
+        <div class="m-value" id="valMetricWater">4,8 m³/h</div>
+      </div>
+
+      <!-- Water Saved vs Classical Sprinkler -->
+      <div class="metric-row saved">
+        <div class="m-label-group">
+          <span class="m-label">🌿 Eau Économisée</span>
+          <span class="m-sub">Précision racinaire</span>
+        </div>
+        <div class="m-value" id="valMetricSaved">−45 %</div>
+      </div>
+
+      <!-- Crops Health & Growth -->
+      <div class="metric-row crop">
+        <div class="m-label-group">
+          <span class="m-label">🍅 Végétation & Récolte</span>
+          <span class="m-sub">Développement végétatif</span>
+        </div>
+        <div class="m-value" id="valMetricCrop">88 %</div>
+      </div>
+
+      <!-- Fuel / Energy Cost Counter -->
+      <div class="metric-row cost" id="metricCardCost">
+        <div class="m-label-group">
+          <span class="m-label">💸 Facture Énergie</span>
+          <span class="m-sub" id="subCost">Coût pour l'agriculteur</span>
+        </div>
+        <div class="m-value" id="valMetricCost" style="color: #10b981;">0 DT</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- BOTTOM BUSINESS PANEL (DOCKABLE / EXPANDABLE) -->
+  <section class="panel-bottom" id="panelBottom">
+    <div class="bottom-header" id="bottomHeader">
+      <div class="bottom-title">
+        <span>📊</span> Modèle Économique & Rentabilité (4ème Éco-Gestion)
+      </div>
+      <div class="bottom-pills">
+        <span class="pill-profit" id="pillProfit">Bénéficiaire : +22 740 DT (An 1)</span>
+        <button class="btn-toggle-dock" id="btnToggleDock" title="Réduire ou agrandir le panneau">▼</button>
+      </div>
+    </div>
+
+    <div class="bottom-content">
+      <!-- 1. Break-even visual bar -->
+      <div class="be-card">
+        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700;">
+          <span>Seuil de Rentabilité : <strong>7,3 $\rightarrow$ 8 unités</strong></span>
+          <span id="beStatusText" style="color: #15803d;">Objectif dépassé !</span>
+        </div>
+        <div class="be-progress-track">
+          <div class="be-marker" title="Seuil (8)"></div>
+          <div class="be-progress-fill" id="beProgressFill"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #64748b;">
+          <span>1 vente</span>
+          <span style="font-weight: 800; color: #0f172a;">▲ Point Mort : 8</span>
+          <span>20 ventes</span>
+        </div>
+      </div>
+
+      <!-- 2. Financial KPIs -->
+      <div class="fin-kpis">
+        <div class="kpi-mini">
+          <div class="kpi-mini-title">Chiffre d'Affaires</div>
+          <div class="kpi-mini-val" id="kpiCA">162 000 DT</div>
+          <div style="font-size: 10px; color: #94a3b8;">(10 × 15k + 12k maint.)</div>
+        </div>
+        <div class="kpi-mini">
+          <div class="kpi-mini-title">Charges Totales</div>
+          <div class="kpi-mini-val" id="kpiCosts">139 260 DT</div>
+          <div style="font-size: 10px; color: #94a3b8;">(Fixes + Variables)</div>
+        </div>
+        <div class="kpi-mini" style="background: #ecfdf5; border-color: #a7f3d0;" id="kpiResultBox">
+          <div class="kpi-mini-title" style="color: #047857;">Résultat Net An 1</div>
+          <div class="kpi-mini-val" id="kpiResult" style="color: #047857;">+22 740 DT</div>
+          <div style="font-size: 10px; color: #059669; font-weight: 700;" id="kpiMargin">~14,0% marge</div>
+        </div>
+      </div>
+
+      <!-- 3. Animated Business Chart (SVG) -->
+      <div class="chart-box">
+        <svg id="businessChartSvg" viewBox="0 0 380 90"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUIDED TOUR MODAL OVERLAY -->
+  <div class="tour-modal" id="tourModal">
+    <div class="tour-header">
+      <span class="tour-step-badge" id="tourStepBadge">Étape 1/7</span>
+      <span class="tour-title" id="tourTitle">Vue d'ensemble</span>
+    </div>
+    <div class="tour-body" id="tourBody">
+      Bienvenue sur l'exploitation agricole équipée par HelioAqua. Découvrons ensemble chaque composant clé !
+    </div>
+    <div class="tour-footer">
+      <button class="tour-nav-btn close" id="btnTourClose">Quitter</button>
+      <div style="display: flex; gap: 8px;">
+        <button class="tour-nav-btn prev" id="btnTourPrev">Précédent</button>
+        <button class="tour-nav-btn next" id="btnTourNext">Suivant ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript Bundle -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

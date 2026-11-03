@@ -1,0 +1,707 @@
+/* ==========================================================================
+   HELIOAQUA - VUE DU CIEL (3D DRONE SIMULATION)
+   Modern glassmorphic UI stylesheet for projector presentations.
+   ========================================================================== */
+
+:root {
+  --primary-solar: #f59e0b;
+  --primary-solar-glow: #fbbf24;
+  --primary-green: #10b981;
+  --primary-green-dark: #047857;
+  --primary-blue: #0284c7;
+  --primary-cyan: #06b6d4;
+  --diesel-red: #ef4444;
+  --diesel-dark: #1e293b;
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-dark-bg: rgba(15, 23, 42, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-border-dark: rgba(255, 255, 255, 0.15);
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-light: #f8fafc;
+  --shadow-lg: 0 16px 36px -8px rgba(0, 0, 0, 0.14), 0 6px 12px -4px rgba(0, 0, 0, 0.08);
+  --radius-xl: 18px;
+  --radius-md: 10px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0f172a;
+  color: var(--text-main);
+  user-select: none;
+}
+
+#canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* -------------------------------------------------------------
+   TOP BAR
+   ------------------------------------------------------------- */
+.top-bar {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  right: 18px;
+  height: 64px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  z-index: 50;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #f59e0b, #06b6d4);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.brand-info h1 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge-mode {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #dbeafe;
+  color: #1e40af;
+  letter-spacing: 0.5px;
+}
+
+.brand-info p {
+  font-size: 13px;
+  color: #475569;
+  font-style: italic;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-header {
+  padding: 9px 18px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-tour {
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.btn-tour:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+}
+
+.btn-labels {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-labels.active {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #7dd3fc;
+}
+
+.btn-reset-cam {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+/* -------------------------------------------------------------
+   LEFT CONTROLS PANEL
+   ------------------------------------------------------------- */
+.panel-left {
+  position: absolute;
+  top: 92px;
+  left: 18px;
+  width: 320px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 50;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+
+.panel-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+.control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.control-val-tag {
+  background: #f0f9ff;
+  color: #0284c7;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* Toggle switch */
+.mode-switch-card {
+  background: #f8fafc;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.mode-switch-card.diesel-mode {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.switch-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 54px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.switch-wrapper input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-track {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #10b981;
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 30px;
+}
+
+.switch-track:before {
+  position: absolute;
+  content: "☀️";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+input:checked + .switch-track {
+  background-color: #ef4444;
+}
+
+input:checked + .switch-track:before {
+  transform: translateX(24px);
+  content: "⛽";
+}
+
+/* Sliders */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 7px;
+  border-radius: 4px;
+  background: #cbd5e1;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #0284c7;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: transform 0.1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* -------------------------------------------------------------
+   RIGHT TELEMETRY PANEL
+   ------------------------------------------------------------- */
+.panel-right {
+  position: absolute;
+  top: 92px;
+  right: 18px;
+  width: 320px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 50;
+}
+
+.metrics-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.metric-row {
+  background: #ffffff;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.metric-row.energy::before { background: var(--primary-solar); }
+.metric-row.water::before { background: var(--primary-cyan); }
+.metric-row.saved::before { background: var(--primary-green); }
+.metric-row.crop::before { background: #22c55e; }
+.metric-row.cost::before { background: #64748b; }
+.metric-row.cost.alert::before { background: var(--diesel-red); }
+
+.m-label-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.m-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.m-sub {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.m-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+/* -------------------------------------------------------------
+   BOTTOM BUSINESS DOCK / ACCORDION
+   ------------------------------------------------------------- */
+.panel-bottom {
+  position: absolute;
+  bottom: 14px;
+  left: 18px;
+  right: 18px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.bottom-header {
+  padding: 12px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: #ffffff;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.bottom-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bottom-pills {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pill-profit {
+  font-size: 13px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.pill-profit.loss {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+.btn-toggle-dock {
+  background: #f1f5f9;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  cursor: pointer;
+  color: #475569;
+}
+
+.bottom-content {
+  padding: 16px 22px;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.panel-bottom.collapsed .bottom-content {
+  display: none;
+}
+
+/* Break-even progress card */
+.be-card {
+  background: #f8fafc;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.be-progress-track {
+  height: 12px;
+  background: #e2e8f0;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.be-progress-fill {
+  height: 100%;
+  width: 50%;
+  background: linear-gradient(90deg, #f59e0b, #10b981);
+  border-radius: 8px;
+  transition: width 0.3s ease, background 0.3s;
+}
+
+.be-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 40%; /* 8/20 */
+  width: 3px;
+  background: #0f172a;
+}
+
+/* KPI triple columns */
+.fin-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.kpi-mini {
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.kpi-mini-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.kpi-mini-val {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 2px;
+}
+
+/* Chart container */
+.chart-box {
+  background: #ffffff;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+#businessChartSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* -------------------------------------------------------------
+   GUIDED TOUR FLOATING CARD
+   ------------------------------------------------------------- */
+.tour-modal {
+  position: absolute;
+  top: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 540px;
+  max-width: 90%;
+  background: var(--glass-dark-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #ffffff;
+  padding: 20px 24px;
+  border-radius: 20px;
+  border: 2px solid var(--primary-solar);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  display: none;
+  animation: tourIn 0.3s ease;
+}
+
+@keyframes tourIn {
+  from { opacity: 0; transform: translate(-50%, -15px) scale(0.96); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+.tour-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.tour-step-badge {
+  background: var(--primary-solar);
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.tour-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.tour-body {
+  font-size: 16px;
+  color: #cbd5e1;
+  line-height: 1.45;
+  margin-bottom: 16px;
+}
+
+.tour-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tour-nav-btn {
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tour-nav-btn.next {
+  background: var(--primary-solar);
+  color: #0f172a;
+}
+
+.tour-nav-btn.prev, .tour-nav-btn.close {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+/* -------------------------------------------------------------
+   3D FLOATING LABEL PINS
+   ------------------------------------------------------------- */
+.hotspot-label {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.hotspot-label:hover {
+  transform: translate(-50%, -110%) scale(1.08);
+  background: #0284c7;
+  border-color: #38bdf8;
+}
+
+.hotspot-label::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0;
+  border-style: solid;
+  border-color: rgba(15, 23, 42, 0.85) transparent;
+  display: block;
+  width: 0;
+}
+
+.hotspot-label:hover::after {
+  border-color: #0284c7 transparent;
+}
+
+/* Responsive projector adjustments */
+@media (max-width: 1080px) {
+  .panel-left, .panel-right {
+    width: 270px;
+  }
+  .bottom-content {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}

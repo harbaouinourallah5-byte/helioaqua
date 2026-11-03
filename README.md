@@ -1,17 +1,22 @@
 # HelioAqua – Vue du Ciel (Simulation 3D Interactive)
 > *« L'eau du soleil pour une agriculture durable »*  
 > **Projet de Startup Étudiante – Section 4ème Économie et Gestion**  
-> Équipe : **Ela Guesmi, Imen Bouali, Maram Khaloufi, Lina Ghars**
+> Équipe : **Ela Guesmi, Imen Bouali, Maram Khaloufi, Lina Ghars**  
+> 🌐 **Démonstration en Ligne :** [https://harbaouinourallah5-byte.github.io/helioaqua/](https://harbaouinourallah5-byte.github.io/helioaqua/)  
+> 📦 **Dépôt GitHub :** [https://github.com/harbaouinourallah5-byte/helioaqua](https://github.com/harbaouinourallah5-byte/helioaqua)
 
 ---
 
 ## 🚀 Comment lancer la simulation ?
 
-### Option 1 : Directement sans aucun serveur (Le plus simple en classe)
-Ouvrez simplement le fichier **`dist/index.html`** en double-cliquant dessus dans l'explorateur de fichiers de Windows.  
+### Option 1 : Démonstration en direct en ligne
+Rendez-vous simplement sur : **[https://harbaouinourallah5-byte.github.io/helioaqua/](https://harbaouinourallah5-byte.github.io/helioaqua/)**
+
+### Option 2 : Directement sans aucun serveur (100% hors-ligne)
+Ouvrez simplement le fichier **`dist/index.html`** (ou **`docs/index.html`**) en double-cliquant dessus dans l'explorateur de fichiers de Windows.  
 Il s'agit d'une version autonome tout-en-un (HTML + CSS + Three.js intégrés), **100% hors-ligne**, sans besoin d'internet ni de Node.js.
 
-### Option 2 : Mode Développement (Vite Dev Server)
+### Option 3 : Mode Développement (Vite Dev Server)
 Si vous souhaitez modifier le code ou lancer le serveur de développement :
 ```bash
 # Dans le dossier c:\Users\harba\Downloads\ela
